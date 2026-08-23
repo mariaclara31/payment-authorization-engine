@@ -1,4 +1,4 @@
-package com.foundation.configuration;
+package com.foundation.config;
 
 import com.foundation.repository.AccountRepository;
 import com.foundation.repository.InMemoryAccountRepository;

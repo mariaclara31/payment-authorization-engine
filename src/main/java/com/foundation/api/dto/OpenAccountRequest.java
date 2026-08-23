@@ -1,4 +1,4 @@
-package com.foundation.domain.dto;
+package com.foundation.api.dto;
 
 import jakarta.validation.constraints.NotBlank;
 

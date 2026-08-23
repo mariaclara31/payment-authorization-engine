@@ -1,7 +1,7 @@
-package com.foundation.controller;
+package com.foundation.api.controller;
 
-import com.foundation.domain.dto.AccountResponse;
-import com.foundation.domain.dto.OpenAccountRequest;
+import com.foundation.api.dto.AccountResponse;
+import com.foundation.api.dto.OpenAccountRequest;
 import com.foundation.domain.model.Account;
 import com.foundation.repository.AccountRepository;
 import com.foundation.service.TransactionService;

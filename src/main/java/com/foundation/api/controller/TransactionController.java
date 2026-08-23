@@ -1,8 +1,8 @@
-package com.foundation.controller;
+package com.foundation.api.controller;
 
-import com.foundation.domain.dto.AmountRequest;
-import com.foundation.domain.dto.TransactionResponse;
-import com.foundation.domain.dto.TransferRequest;
+import com.foundation.api.dto.AmountRequest;
+import com.foundation.api.dto.TransactionResponse;
+import com.foundation.api.dto.TransferRequest;
 import com.foundation.domain.model.Transaction;
 import com.foundation.service.TransactionService;
 import jakarta.validation.Valid;
