@@ -11,9 +11,11 @@
       <relativePath/>
     </parent>
 
-    <groupId>com.foundation</groupId>
-    <artifactId>java-foundation-lab</artifactId>
+    <groupId>com.paymentengine</groupId>
+    <artifactId>payment-authorization-engine</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <name>payment-authorization-engine</name>
+    <description>A high-integrity payment authorization engine built in Java and Spring Boot</description>
 
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
@@ -43,6 +45,22 @@
           <artifactId>spring-boot-starter-webmvc-test</artifactId>
           <scope>test</scope>
         </dependency>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-jdbc</artifactId>
+      </dependency>
+
+      <dependency>
+        <groupId>com.h2database</groupId>
+        <artifactId>h2</artifactId>
+        <scope>runtime</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-jdbc-test</artifactId>
+        <scope>test</scope>
+      </dependency>
     </dependencies>
 
     <build>

@@ -58,7 +58,7 @@ extracted into a standalone library without changes.
 
 ### Package structure
 
-    com.foundation
+    com.paymentengine
     ├── Application            Spring Boot entry point
     ├── config                 composition root (BeanConfiguration)
     ├── api                    HTTP boundary
