@@ -4,6 +4,7 @@ import com.paymentengine.api.dto.ErrorResponse;
 import com.paymentengine.domain.exception.AccountNotFoundException;
 import com.paymentengine.domain.exception.InsufficientBalanceException;
 import com.paymentengine.domain.exception.InvalidTransactionException;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -24,6 +25,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({InsufficientBalanceException.class, InvalidTransactionException.class})
     public ResponseEntity<ErrorResponse> handleBusinessRule(RuntimeException ex) {
         return build(HttpStatus.UNPROCESSABLE_CONTENT, ex.getMessage());
+    }
+
+    @ExceptionHandler(OptimisticLockingFailureException.class)
+    public ResponseEntity<ErrorResponse> handleOptimisticLockingFailure(OptimisticLockingFailureException ex) {
+        return build(HttpStatus.CONFLICT,
+                "The account was modified by another operation. Please retry.");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

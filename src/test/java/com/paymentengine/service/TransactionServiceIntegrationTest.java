@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jdbc.test.autoconfigure.DataJdbcTest;
 import org.springframework.test.context.jdbc.Sql;
-
+import org.springframework.transaction.PlatformTransactionManager;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -33,11 +33,14 @@ class TransactionServiceIntegrationTest {
     @Autowired
     private TransactionRepository transactionRepository;
 
+    @Autowired
+    private PlatformTransactionManager transactionManager;
+
     private TransactionService service;
 
     @BeforeEach
     void setUp() {
-        service = new TransactionService(accountRepository, transactionRepository);
+        service = new TransactionService(accountRepository, transactionRepository, transactionManager);
     }
 
     @Nested

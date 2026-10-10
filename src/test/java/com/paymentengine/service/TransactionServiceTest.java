@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -32,19 +33,28 @@ class TransactionServiceTest {
     @Mock
     private TransactionRepository transactionRepository;
 
+    @Mock
+    private PlatformTransactionManager transactionManager;
+
     @InjectMocks
     private TransactionService transactionService;
 
     @Test
     void constructor_shouldRejectNullAccountRepository() {
         assertThrows(NullPointerException.class,
-                () -> new TransactionService(null, transactionRepository));
+                () -> new TransactionService(null, transactionRepository, transactionManager));
     }
 
     @Test
     void constructor_shouldRejectNullTransactionRepository() {
         assertThrows(NullPointerException.class,
-                () -> new TransactionService(accountRepository, null));
+                () -> new TransactionService(accountRepository, null, transactionManager));
+    }
+
+    @Test
+    void constructor_shouldRejectNullTransactionManager() {
+        assertThrows(NullPointerException.class,
+                () -> new TransactionService(accountRepository, transactionRepository, null));
     }
 
     @Nested
