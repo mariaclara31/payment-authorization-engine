@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.client.RestTestClient;
@@ -222,6 +223,68 @@ class TransactionControllerTest {
                     .expectStatus().isBadRequest();
 
             verifyNoInteractions(transactionService);
+        }
+    }
+
+    @Nested
+    class Conflict {
+
+        private static final String CONFLICT_MESSAGE =
+                "The account was modified by another operation. Please retry.";
+
+        @Test
+        void withdraw_shouldReturn409WhenOptimisticLockingFails() {
+            UUID accountId = UUID.randomUUID();
+            when(transactionService.withdraw(eq(accountId), any(BigDecimal.class)))
+                    .thenThrow(new OptimisticLockingFailureException("version mismatch"));
+
+            restTestClient.post()
+                    .uri("/accounts/{id}/withdrawals", accountId)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body("{\"amount\": 30.00}")
+                    .exchange()
+                    .expectStatus().isEqualTo(409)
+                    .expectBody()
+                    .jsonPath("$.status").isEqualTo(409)
+                    .jsonPath("$.message").isEqualTo(CONFLICT_MESSAGE);
+        }
+
+        @Test
+        void deposit_shouldReturn409WhenOptimisticLockingFails() {
+            UUID accountId = UUID.randomUUID();
+            when(transactionService.deposit(eq(accountId), any(BigDecimal.class)))
+                    .thenThrow(new OptimisticLockingFailureException("version mismatch"));
+
+            restTestClient.post()
+                    .uri("/accounts/{id}/deposits", accountId)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body("{\"amount\": 100.00}")
+                    .exchange()
+                    .expectStatus().isEqualTo(409)
+                    .expectBody()
+                    .jsonPath("$.status").isEqualTo(409)
+                    .jsonPath("$.message").isEqualTo(CONFLICT_MESSAGE);
+        }
+
+        @Test
+        void transfer_shouldReturn409WhenOptimisticLockingFails() {
+            UUID source = UUID.randomUUID();
+            UUID target = UUID.randomUUID();
+            doThrow(new OptimisticLockingFailureException("version mismatch"))
+                    .when(transactionService)
+                    .transfer(eq(source), eq(target), any(BigDecimal.class));
+
+            restTestClient.post()
+                    .uri("/transfers")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body("{\"sourceAccountId\": \"" + source + "\", " +
+                            "\"targetAccountId\": \"" + target + "\", " +
+                            "\"amount\": 20.00}")
+                    .exchange()
+                    .expectStatus().isEqualTo(409)
+                    .expectBody()
+                    .jsonPath("$.status").isEqualTo(409)
+                    .jsonPath("$.message").isEqualTo(CONFLICT_MESSAGE);
         }
     }
 }
