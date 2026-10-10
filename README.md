@@ -1,6 +1,6 @@
-# Java Foundation Lab
+# Payment Authorization Engine
 
-A study project implementing the core of a banking system — accounts, transactions,
+A project implementing the core of a banking system — accounts, transactions,
 and transfers — exposed through a REST API. Built to demonstrate clean architecture,
 domain modeling, and solid testing practices in Java.
 
